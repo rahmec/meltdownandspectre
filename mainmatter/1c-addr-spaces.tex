@@ -1,0 +1,40 @@
+\subsection{Address Spaces}
+Usually, CPUs support virtual address spaces to isolate processes from each other and to let
+compilers use logical addresses instead of directly accessing physical memory addresses. Virtual addresses
+are then translated to physical addresses. For optimization of memory usage, paging is also used
+to reduce memory usage. Paging is also used to separate User Space addresses from Kernel Mode addresses,
+in order to let only privileged processes to access kernel address space. Translation tables are used in order to define virtual to phisical mappings
+and also protection properties such as readable, writeble, executable and whether the page is accessible by
+user or not (meaning that only kernel mode processes can access the page).
+Every proces has its own translation table which is held on a special CPU register, so "on each context switch the \textbf{operating system} updates
+this register with the next process' translation table address in order to implement per process virtual address spaces".
+Each virtual address space itself is split into a user and a kernel part.
+\subsubsection{Exploitation and mitigation}
+Attacks that are targeting memory corruption bugs often requires the knowledge of addresses of specific data.
+ASLR mitigation has been introduced to randomize address space layout in order to obfuscate memory mapping to
+attackers. KASLR (Kernel Address Layout Randomization) was introduced to protect the kernel, randomizing the offsets where
+drivers are located on every boot, making attacks harder as they now require to guess the location of kernel data structures.
+\subsubsection{Side channel attacks}
+From Wikipedia, here's a definition of side-channel attack
+\begin{quotation}
+    In computer security, a side-channel attack is any attack based on extra
+    information that can be gathered because of the fundamental way a computer
+    protocol or algorithm is implemented, rather than flaws in the design of the
+    protocol or algorithm itself or minor, but potentially devastating, mistakes
+    or oversights in the implementation.
+\end{quotation}
+Side-channel attacks allow to detect the exact location of kernel data structures or derandomize ASLR. A combination of
+software bug and the knowledge of these addresses can lead to privileged code execution.
+More in depth on side channels, there are many ways we can gather information, for example: timing, RF, electromagnetic emissions, and others.
+[reference: https://www.youtube.com/watch?v=D1DNz5sNDgE]
+Moreover, there's also the Covert Channel attacks, which are a special use case of side channels, where basically we intentionally send information
+to a system in order to induce the side effects we want to measure.
+[reference: meltdown, https://en.wikipedia.org/wiki/Covert_channel]
+Specifically for our use case, side channels includes: Evict+Time, Prime+Probe and Flush+Relode. We will discuss only the latter.
+These attacks are specifically designed to leak information from the cache exploiting timing differences induced by them selfs.
+\subsubsection{Flush+Reload}
+An attacker frequently flushes a targeted memory locatiojn using the clflush instruction. By measuring the time it takes to Reload
+the data, the attacker determines wheteher data was loaded into the cache by another process in the meantime.
+
+
+
