@@ -1,0 +1,4 @@
+https://meltdownattack.com/meltdown.pdf
+https://spectreattack.com/spectre.pdf
+https://www.cs.cmu.edu/afs/cs/academic/class/15740-s17/www/lectures/L19-BranchPrediction.pdf
+
