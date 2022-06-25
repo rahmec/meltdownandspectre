@@ -1,5 +1,25 @@
-\chapter{Out of Order Execution}
+\section{Out of Order Execution}
 % what is out of order?
-Out of order is a technique used by many CPUs nowadays and the main reason being the improvements on perfomance that it brings, allowing
-CPU to decide what to execute first and what after basing its decision purely on what dependencies the instruction has.
+Out of order is a technique used by many CPUs nowadays the main reason being the improvements on perfomance that it brings, allowing
+CPU to decide what to execute first and what after.
+To make it possible, different techniques where developed.
+
+\subsection{Reservation Station}
+
+\begin{quote}
+    In 1967, Tomasulo [33] developed an algorithm [33]
+    that enabled dynamic scheduling of instructions to al-
+    low out-of-order execution.
+\end{quote}
+Tomasulo developed a way to allow instructions that operate on the same physical registers to rename registers
+and use the last logical one to solve read-after-write (True data dependeny, or RAW),
+write-after-read (Antidependency, or WAR) and write-after-write (WAW) hazards: the Reservation Station.
+In other words, this lets the CPU use data values as soon as they are computed instead of reading value from a register,
+writing the result on the register and then again reading it.
+The Reservation unit connects all execution units via a common data bus (CDB), where operands of instructions are
+passed so.
+
+
+
+
 
