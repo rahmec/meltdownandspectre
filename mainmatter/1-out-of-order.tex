@@ -1,25 +1,37 @@
-\section{Out of Order Execution}
+\subsection{Out of Order Execution}
 % what is out of order?
-Out of order is a technique used by many CPUs nowadays the main reason being the improvements on perfomance that it brings, allowing
-CPU to decide what to execute first and what after.
-To make it possible, different techniques where developed.
+Out of order is a technique used by many CPUs nowadays, the main reason being the improvements on perfomance that it brings, allowing
+CPU to execute instructions in a different order than how the program was compiled, in order to avoid wasting computational power.
+In this paper we refer to out-of-order as `out-of-order issue out-of-order completion'.
 
-\subsection{Reservation Station}
+\subsubsection{Tomasulo's algorithm}
+For a better understaindg of the Intel's CPU architecture, here is a brief introduction to Tomasulo's algorithm which
+first introduced to techniques like register renaming, reservation station and common data bus (CDB), which allowed
+out-of-order execution.
 
 \begin{quote}
-    In 1967, Tomasulo [33] developed an algorithm [33]
-    that enabled dynamic scheduling of instructions to al-
-    low out-of-order execution.
-\end{quote}
-Tomasulo developed a way to allow instructions that operate on the same physical registers to rename registers
-and use the last logical one to solve read-after-write (True data dependeny, or RAW),
-write-after-read (Antidependency, or WAR) and write-after-write (WAW) hazards: the Reservation Station.
-In other words, this lets the CPU use data values as soon as they are computed instead of reading value from a register,
-writing the result on the register and then again reading it.
-The Reservation unit connects all execution units via a common data bus (CDB), where operands of instructions are
-passed so.
+    In 1967, Tomasulo developed an algorithm that
+    enabled dynamic scheduling of instructions to allow
+    out-of-order execution.
+\end{quote} [1]
+Tomasulo's reservation station allows instructions that operate on the same physical registers to rename registers (register renaming)
+and use the last logical one to solve read-after-write (True data dependeny, or RAW), write-after-read (Antidependency, or WAR) and
+write-after-write (WAW) hazards. Moreover, this lets the execution units use data values as soon as they are computed rather then reading value from a register,
+writing the result on the register and then, again, reading it. [1][2 wikipedia]
+All execution units are directly (and individually) connected to the reservation station via a common data bus (CDB), where operands of instructions are
+passed as soon as they're available. This is useful if an instruction is waiting for an operand that is not already on the register, so it can directly listen
+on the CDB to recive the operand as soon as it is available.
 
-
-
-
-
+\subsubsection{Intel Architecture}
+Meltdown researchers provide a simplified illustration of a single core of the Intel's Skylake microarchitecture which
+well illustrates the architecture.
+%% IMMAGINE IMMAGINE IMMAGINE IMMAGINE IMMAGINE IMMAGINE
+The pipeline of Intel's Skylake processors consists of the front-end, which fetches instructions from memory and decodes them into micro-operations
+(since intel's processors are CISC, while Superscalar/superpipelined processors suits better on RISC, the processor must decode complex operations
+into smaller, less complex micro-operations in order to make the most of out-of-order execution), the back-end (execution engine), which implements
+out-of-order execution, and the memory subsystem.
+The Reorder Buffer is responsible of register allocation, register renaming and retiring. It is also responsible of reordering instruction outputs
+as was intended by the program(mer).
+Micro-operations are directly forwarded to the Unified Reservation Station that queues the operations on exit ports that are connected to Execution Units.
+Of course, Intel's Skylake has it's branch predictor. Usally branch predictors are implemented with \textit{taken/not taken} bits which tracks the history
+of a branch and indicates if previosly the branch was taken or not taken. This can be implemented with 1-bit or 2-bit counters.
