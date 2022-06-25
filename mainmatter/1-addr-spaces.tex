@@ -1,4 +1,4 @@
-\subsection{Address Spaces}
+\section{Address Spaces}
 Usually, CPUs support virtual address spaces to isolate processes from each other and to let
 compilers use logical addresses instead of directly accessing physical memory addresses. Virtual addresses
 are then translated to physical addresses. For optimization of memory usage, paging is also used
@@ -29,8 +29,8 @@ More in depth on side channels, there are many ways we can gather information, f
 [reference: https://www.youtube.com/watch?v=D1DNz5sNDgE]
 Moreover, there's also the Covert Channel attacks, which are a special use case of side channels, where basically we intentionally send information
 to a system in order to induce the side effects we want to measure.
-[reference: meltdown, https://en.wikipedia.org/wiki/Covert_channel]
-Specifically for our use case, side channels includes: Evict+Time, Prime+Probe and Flush+Relode. We will discuss only the latter.
+[reference: meltdown, https://en.wikipedia.org/wiki/Covert\_channel]
+Specifically for our use case, side channels includes: Evict+Time, Prime+Probe and Flush+Reload. We will discuss only the latter.
 These attacks are specifically designed to leak information from the cache exploiting timing differences induced by them selfs.
 \subsubsection{Flush+Reload}
 An attacker frequently flushes a targeted memory locatiojn using the clflush instruction. By measuring the time it takes to Reload
