@@ -6,8 +6,9 @@ As the name suggests, it is based on the execution of operations that might or m
 A signifcant number of implementations of branch prediction have been designed over the last 50 years, many of which are the evolution of previously designed 
 For the sake of this paper we will just differentiate between 2 of them, more precisely 2 macro-categories of branch prediction.
 \subsubsection{Static Branch Prediction}
-Static Branch Prediction is the simplest type of Branch Prediction. It utilizes information gathered before the execution of the program.
+Static Branch Prediction is the simplest type of Branch Prediction. Predictor behaviour does not change during the execution of a program. The simplest examples are predictors that either predict that branch are always taken or always not taken. Some ISAs give the possibility, when using branch instructions, to insert a bit that hints wether a branch should be predicted taken or not.
 \subsubsection{Dynamic Branch Prediction}
+Dynamic Branch Predictors change behaviour according to information gathered at run-time, for an improved misprediction rate. 
 
 \subsection{Branch Target Prediction}
 Another type of speculation implemented in modern CPUs is Branch Target Prediction.
@@ -23,3 +24,7 @@ If not the entry is deleted from the BTB, and 2 cycles are lost.
 If the instruction PC is not in the BTB, if after being decoded turns it's an jump instruction then its PC and target address are saved in the table.
 Workflow can be seen in Figure underneath:
 \includegraphics[scale=0.35]{img/BTB.png}
+
+\subsection{Return Stack Buffer}
+
+\subsection{Store Buffer}

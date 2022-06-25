@@ -1,5 +1,6 @@
 https://meltdownattack.com/meltdown.pdf
 https://spectreattack.com/spectre.pdf
 https://www.cs.cmu.edu/afs/cs/academic/class/15740-s17/www/lectures/L19-BranchPrediction.pdf
-https://web.archive.org/web/20190717130447/http://web.engr.oregonstate.edu/~benl/Projects/branch_pred/#l0
+https://web.archive.org/web/20190717130447/http://web.engr.oregonstate.edu/~benl/Projects/branch_pred
 https://ece-research.unm.edu/jimp/611/slides/chap4_5.html
+https://www.usenix.org/system/files/conference/woot18/woot18-paper-koruyeh.pdf
