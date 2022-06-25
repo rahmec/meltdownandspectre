@@ -1,27 +1,22 @@
 \documentclass[10pt, a4paper, twocolumn]{article}
+\usepackage{graphicx}
 \title{Meltdown and Spectre}
 \author{Began Bajrami, Rahmi El Mechri}
 \begin{document}
 \maketitle
 \begin{abstract}
-\input{mainmatter/0-intro.tex}
+   TODO 
 \end{abstract}
-\section{Introduction}
+\input{mainmatter/0-intro.tex}
 \input{mainmatter/1-out-of-order.tex}
-\input{mainmatter/1c-addr-spaces.tex}
-\input{mainmatter/2-branch-prediction.tex}
+\input{mainmatter/1-addr-spaces.tex}
+\input{mainmatter/1-speculative-execution.tex}
 \input{mainmatter/6-diffs.tex}
-\section{Meltdown}
 \input{mainmatter/3-meltdown.tex}
-\section{Spectre}
 \input{mainmatter/4-spectre.tex}
-\section{Exploits}
-\input{mainmatter/5a-meltdown-exploit.tex}
-\input{mainmatter/5b-spectre-exploit.tex}
-\section{Impact}
+\input{mainmatter/5-meltdown-exploit.tex}
+\input{mainmatter/5-spectre-exploit.tex}
 \input{mainmatter/7-stats.tex}
-\section{Mitigations}
 \input{mainmatter/8-mitigation.tex}
-\section{Conclusion}
 \input{mainmatter/9-conclusion.tex}
 \end{document}
