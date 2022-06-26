@@ -25,7 +25,11 @@ So our secret is stored from "0xABC0" (`m', first letter) to "0xABC7" (`n', last
    secret = readAddress(0xABC0);
 ...
 \end{verbatim}
-\includegraphics[scale=0.25]{img/meltdown-step-one.png}
+
+\begin{figure}[!h]
+    \includegraphics[scale=0.25]{img/meltdown-step-one.png}
+    \caption{Current microarchitectural state}
+\end{figure}
 
 
 \subsubsection{Step 2: Allocate Probe Array}
@@ -83,10 +87,14 @@ At this point all that's left to do is to store the secret value in a manner tha
 ...
 \end{verbatim}
 
-\includegraphics[scale=0.25]{img/meltdown-step-two.png}
-\newline
-\includegraphics[scale=0.25]{img/meltdown-step-four.png}
-\newline
+\begin{figure}[!h]
+    \includegraphics[scale=0.25]{img/meltdown-step-two.png}
+    \caption{Microarchitectural state on cache miss}
+\end{figure}
+\begin{figure}[!h]
+    \includegraphics[scale=0.25]{img/meltdown-step-four.png}
+    \caption{Microarchitectural state on cache hit}
+\end{figure}
 
 In our example, we iterate every page relevant to our probe\_array in order to leverage Flush+Reload technique previously discussed.
 We iterate all 52 pages of the probe\_array and measure how cycles does it take to load the value: in our assumptions, if the cycle count

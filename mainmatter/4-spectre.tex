@@ -51,7 +51,10 @@ After choosing the gadget, mistrainer we must branch to the same virtual address
 It doesn't matter what it's branching to, the goal is correctly mistraining the predictor.
 This concept can be seen from the following schema:
 
-\includegraphics[scale=0.4]{img/sv2-mistraining.png}
+\begin{figure}[!h]
+    \includegraphics[scale=0.4]{img/sv2-mistraining.png}
+    \caption{}
+\end{figure}
 
 We must also note that the mistrainer must run on the same core the victim program will run on, as prediction tables are not shared between different cores.
 This is true for every type of predictor mistraining explained in this paper.
