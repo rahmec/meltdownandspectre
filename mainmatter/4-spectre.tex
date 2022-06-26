@@ -65,7 +65,13 @@ What they realized is that isolating Branch Target Buffer across different privi
 From userland attackers can inject entries into the BHB and fill it with gadgets' address. When kernel-level progams are executed the predictor will base its prediction on the manually inserted entries, thut achieving cross-privilege mistraining.
 Unlike BTI, AMD processors seem to be uneffected from this vulnerability, as only Intel and ARM CPUs are effected.
 
+\subsection{SpectreRSB}
+This variant of Spectre exploits the Return Stack Buffer, which job we have already explained in the Speculative Execution section.
+The way this is exploitation is done is by polluting the RSB(i.e. manually injecting entries into it), in order to have the victim program execute gadgets the attacker has chosen.
+Although not officialy adressed as an extension of Spectre v2, it uses an approach similar to the Branch HIstory Injection technique.
+
 \subsection{v3 - Rogue Data Cache Load}
+The third variant of Spectre is very rarely referred as Spectre v3, as it is more known as Meltdown. To deepen this topic, read Meltdown section.
 
-\subsection{v4 - Speculative Store Bypass (STL)}
-
+\subsection{v4 - Speculative Store Bypass}
+This last variant of Spectre, also known as SpectreSTL, exploits Speculative Store Buffer Bypass, allowing an attacker to read arbitrary priviliged data, or run older command speculatively than can lead to cache allocations, thus readable via common side-channel techniques.

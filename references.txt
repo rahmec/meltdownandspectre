@@ -10,6 +10,7 @@ https://www.redhat.com/en/blog/speculative-store-bypass-explained-what-it-how-it
 https://www.techrepublic.com/article/spectre-and-meltdown-explained-a-comprehensive-guide-for-professionals/
 https://course.ece.cmu.edu/~ece740/f15/lib/exe/fetch.php?media=18-740-fall15-lecture05-branch-prediction-afterlecture.pdf
 https://download.vusec.net/papers/bhi-spectre-bhb_sec22.pdf
+https://www.usenix.org/sites/default/files/conference/protected-files/woot18_slides_koruyeh.pdf
 
 
 https://gruss.cc/files/kaiser.pdf
