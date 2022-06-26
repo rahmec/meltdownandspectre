@@ -6,7 +6,9 @@ For this reason speculatively executed instructions are also referred as transie
 In this section we will give a look at different speculation techniques, to better understand how the different versions of Spectre vulnerability work.
 
 \subsection{Branch Prediction}
-READ PIPELINING AND WRITE THIS INTRODUCTION FFS.
+Branch Prediction is a technique that greatly enhances performances in superpipelined CPUs.
+When a conditional jump is encountered an entity called Branch Predictor decides if the content of that branch should be executed while fetching for data stored in memory needed to check for the condition.
+Different type of branch prediction have been implemented over the years. In this section we will describe Static Branch Prediction, prevalently used in old CPUS, and Dynamic Branch Prediction, present in every modern high-performance CPU.
 \subsubsection{Static Branch Prediction}
 Static Branch Prediction is the simplest type of Branch Prediction. Predictor behaviour does not change during the execution of a program. The simplest examples are predictors that either predict that branch are always taken or always not taken. Some ISAs give the possibility, when using branch instructions, to insert a bit that hints wether a branch should be predicted taken or not.
 \subsubsection{Dynamic Branch Prediction}
@@ -27,7 +29,7 @@ Branch Target Predictor uses a buffer called Branch Target Buffer(BTB), which st
 For every entry in the table 2 predictions bits are added, just like branch prediction 2-bit schema, to improve target prediction.
 This means that new entry have 2 prediction bits set as 'Predict Taken'.
 Every time an instruction is fetched, the BTB is looked up to check if it contains the instruction PC, if so, then the associated target address is sent out.
-If it target turns out to be correct then we've saved - TODO -
+If it target turns out to be correct then we've achieved a boost in performances.
 If not the entry is deleted from the BTB, and 2 cycles are lost.
 If the instruction PC is not in the BTB and after being decoded turns out it's a jump instruction then its PC and target address are saved in the table.
 This means that when the same jump instruction is encountered it is recognized as a jump instruction even before fetching it.
