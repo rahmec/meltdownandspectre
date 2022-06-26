@@ -17,13 +17,13 @@ This method doesn't take it count if the last prediction was or wasn't right, pl
 \includegraphics[scale=0.35]{img/2bitBHT.png}
 
 Dynamic Branch Predictor evolved and became more complex, and the concept of 2-level prediction arised. It is based on 2 concepts: Global Branch Correlation, or how a branch outcome is influenced by other branches, and Local Branch Correlation, that is how a branch is influenced by past predictions. This type of prediction uses what's called Patther History Table, or PHT, which associates the pattern(other branches + past outcomes) with the 2-bit schema seen before. This notably enhances the number of correct prediction.
-Modern Branch Predictors' PHT use machine learning, state-of-the-art predictors use what's called perceptron predictor. This improves misprediction rate but increases latency. For the sake of this paper we will not dive into this argument.
+Modern Branch Predictors' PHT use machine learning, state-of-the-art predictors use what's called perceptron predictor. This improves misprediction rate but increases latency. For the sake of this paper we will not dive into its explaination.
 
 \subsection{Branch Target Prediction}
 Another type of speculation implemented in modern CPUs is Branch Target Prediction.
 Every time a jump instruction is encountered fetch cycles are lost to fetch and decode the instruction.
 To fasten up this process, in order to fetch the target instruction as soon as possible, modern CPUs implement what's called a Branch Target Predictor.
-Branch Target Predictor uses a buffer called Branche Target Buffer(BTB), which structure is analog to a cache: it associates instruction PCs to branch target PCs. Every time a new jump is fetched and decoded, its PC and target address are stored in the BTB.
+Branch Target Predictor uses a buffer called Branch Target Buffer(BTB), which structure is analog to a cache: it associates instruction PCs to branch target PCs. Every time a new jump is fetched and decoded, its PC and target address are stored in the BTB.
 For every entry in the table 2 predictions bits are added, just like branch prediction 2-bit schema, to improve target prediction.
 This means that new entry have 2 prediction bits set as 'Predict Taken'.
 Every time an instruction is fetched, the BTB is looked up to check if it contains the instruction PC, if so, then the associated target address is sent out.
