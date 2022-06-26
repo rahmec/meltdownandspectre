@@ -7,3 +7,5 @@ https://www.usenix.org/system/files/conference/woot18/woot18-paper-koruyeh.pdf
 https://www.cs.umd.edu/~meesh/411/CA-online/chapter/dynamic-branch-prediction/index.html
 https://docs.oracle.com/cd/E23824_01/html/819-3196/hwovr-14.html
 https://www.redhat.com/en/blog/speculative-store-bypass-explained-what-it-how-it-works
+https://www.techrepublic.com/article/spectre-and-meltdown-explained-a-comprehensive-guide-for-professionals/
+https://course.ece.cmu.edu/~ece740/f15/lib/exe/fetch.php?media=18-740-fall15-lecture05-branch-prediction-afterlecture.pdf
