@@ -5,6 +5,7 @@ mitigation by meltdown researchers make machines secure. That's because
 Mletdown, and Spectre, acts on hardware and bypasses the hardware-enforced isolation of security domains.
 A countermeasure would be to completely disable out-of-order execution but this will make processors slow enough to make any modern CPU parallelism mechanism
 completely useless and the performance impact would be devastating. As of 2022, PTI (KAISER) is enabled by default on Linux kernels as a countermeasure to Meltdown.
+
 \subsection{KAISER}
 KAISER (Kernel Address Isolation to have Side-channels Efficiently Removed) was not originally intended for Meltdown, but has as side effect the mitigation of it
 since KAISER prevents side channel attacks breaking KASLR. But this has its own limitations: first of all, performances will decrease since every context switch will
