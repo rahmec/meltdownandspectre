@@ -1,0 +1,13 @@
+\section{Meltdown mitigations}
+Since Meltdown is a micro-architectural vulnerability, there is no software update that can completaly make mahcines secured from Meldown attacks.
+Not even KAISER (also known as PTI, page-table isolation, or KPTI on Linux kernel) which is the proposed
+mitigation by meltdown researchers make machines secure. That's because
+Mletdown, and Spectre, acts on hardware and bypasses the hardware-enforced isolation of security domains.
+A countermeasure would be to completely disable out-of-order execution but this will make processors slow enough to make any modern CPU parallelism mechanism
+completely useless and the performance impact would be devastating. As of 2022, PTI (KAISER) is enabled by default on Linux kernels as a countermeasure to Meltdown.
+\subsection{KAISER}
+KAISER (Kernel Address Isolation to have Side-channels Efficiently Removed) was not originally intended for Meltdown, but has as side effect the mitigation of it
+since KAISER prevents side channel attacks breaking KASLR. But this has its own limitations: first of all, performances will decrease since every context switch will
+need more clock cycles for address mappings; second, there is still a residual attack surface for Meltdown since several privileged memory locations are required
+to be mapped in user space. However, these memory locations do not contain any secrets, but they might contain pointers to Kernel Address space. This information, if leaked,
+is enough to break KASLR, as the randomization can be calculated from the pointer value.

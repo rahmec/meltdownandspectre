@@ -1,14 +1,18 @@
 \section{Side channel}
 Usually, CPUs support virtual address spaces to isolate processes from each other and to let
-compilers use logical addresses instead of directly accessing physical memory addresses. Virtual addresses
-are then translated to physical addresses. For optimization of memory usage, paging is also used
+compilers use logical addresses instead of directly accessing physical memory addresses.
+Virtual addresses are then translated to physical addresses. For optimization of memory usage, paging is also used
 to reduce memory usage and to separate User Space addresses from Kernel Mode addresses,
 in order to let only privileged processes to access kernel address space. Translation tables are used in order to define virtual to phisical mappings
 and also protection properties such as readable, writeble, executable and whether the page is accessible by
 user or not (meaning that only kernel mode processes can access the page).
-Every proces has its own translation table which is held on a special CPU register, so "on each context switch the \textbf{operating system} updates
+These attributes are verified everytime an instruction is accessing them, resulting in a CPU trap (hardware exception) if the processes
+which required that address is not allowed to. This is handled by the Reorder Buffer on superscalar/superpipelined processors, when reordering results
+of instructions that have been executed out-of-order.
+Every process has its own translation table which is held on a special CPU register, so "on each context switch the \textbf{operating system} updates
 this register with the next process' translation table address in order to implement per process virtual address spaces".
 Each virtual address space itself is split into a user and a kernel part.
+
 \subsubsection{Exploitation and mitigation}
 Attacks that are targeting memory corruption bugs often requires the knowledge of addresses of specific data.
 ASLR mitigation has been introduced to randomize address space layout in order to obfuscate memory mapping to
@@ -16,6 +20,7 @@ attackers. KASLR (Kernel Address Layout Randomization) was introduced to protect
 drivers are located on every boot, making attacks harder as they now require to guess the location of kernel data structures.
 But KASLR is not sufficent to mitigate Meltdown attacks since a simple bruteforcing of the memory physical addresses can leak
 such information.
+
 \subsubsection{What is side-channel}
 From Wikipedia, here's a definition of side-channel attack
 \begin{quotation}
@@ -28,26 +33,25 @@ From Wikipedia, here's a definition of side-channel attack
 Side channel attacks allows leaking of sensible information, like what pages a processes has recently accessed. These attacks
 allow detection of the exact location of kernel data structures or derandomize ASLR. Moreover, software bugs and the knowledge of these addresses
 can lead to privileged code execution.
+
 \subsubsection{How is side channel implemented}
 More in depth on side channels, there are many ways we can gather information, for example: timing, RF, electromagnetic emissions, and others.
-[reference: https://www.youtube.com/watch?v=D1DNz5sNDgE]
 In our case, simply monitoring the time a cache lines needs to reload leaks information about wether this information was in fact already loaded or not.
-
 \subsubsection{Covert channels}
 Covert Channel attacks are a special use case of side channels, where basically we intentionally send information
 to a system in order to induce the side effects we want to measure.
-[reference: meltdown, https://en.wikipedia.org/wiki/Covert\_channel]
-Specifically for our use case, side channels includes: Evict+Time, Prime+Probe and Flush+Reload. We will discuss only the latter.
+Specifically for our use case, side channels includes: Evict+Time, Prime+Probe and Flush+Reload. We will discuss only the latter since, as stated by
+Meltdown researchers, this is the faster and the more reliable way of doing it.
 These attacks are specifically designed to leak information from the cache exploiting timing differences induced by them selfs.
 
 \subsubsection{Flush+Reload}
-Flush+Reload is a variant of the Prime+Probe technique [reference: https://www.usenix.org/system/files/conference/usenixsecurity14/sec14-paper-yarom.pdf] where an attacker
+Flush+Reload is a variant of the Prime+Probe technique  where an attacker
 frequently flushes a targeted memory location using the clflush (cache line flush) instruction. By measuring the time it takes to Reload
-the data, the attacker determines wheteher data was loaded into the cache by another process in the meantime.
+the data, the attacker determines wether data was loaded into the cache by another process in the meantime.
 An attack consists of three phases: first, the attacker flushes the memory cache line that he wants to monitor, then, he just waits for the victim process to read the same
 memory line; if the victim has, in fact, accessed that same memory line again, the value will be stored on the cache, otherwise no cache line will be loaded. Which brings
 the attacker to the third phase: if the cache line was loaded, the access time to that line will be very fast, otherwise the attempt will result on a "cache miss" which
 means that the victim process didn't access to the memory line again (in other words: the attacker will wait much longer to access that value). Usually, the unit measure
 used is "cycles the CPU needs to fetch the data" instead of microseconds or any othe time measure.
-Meltdown and Spectre attacks use this technique to know what is the value of the secrets the attacker wants to leak from a specified process or a specified physical memory range, in the Meltdown attack case.
-
+Meltdown and Spectre attacks use this technique to know what is the value of the secrets the attacker
+wants to leak from a specified process or a specified physical memory range.
