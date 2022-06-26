@@ -11,3 +11,27 @@ since KAISER prevents side channel attacks breaking KASLR. But this has its own 
 need more clock cycles for address mappings; second, there is still a residual attack surface for Meltdown since several privileged memory locations are required
 to be mapped in user space. However, these memory locations do not contain any secrets, but they might contain pointers to Kernel Address space. This information, if leaked,
 is enough to break KASLR, as the randomization can be calculated from the pointer value.
+
+\section{Spectre Mitigations}
+In this section we will discuss the different countermeasures proposed for the Spectre vulnerability.
+\subsection{Speculative Execution Prevention}
+As stated multiple times, Spectre totally relies on Speculative Execution. 
+Removing it would eliminate the vulnerability, but it would also mean renouncing to decades of performance improvement, therefore making this solution impracticable.
+AMD and Intel suggested, as software solution, using the lfence instruction, that doesn't allows instruction following it to be executed.
+In practice this means renouncing to speculative execution, hence should be used only when transient instructions could lead to dangerous otucomes.
+\subsection{Secret Data Access Prevention}
+Spectre vulnerability can be exploited using code written in JavaScript, thus browser, can and have to implement solutions to make the access to secred data more difficult.
+Google Chrome runs every website on a separate process as certain Spectre exploits are limited by victim permissions.
+Webkit implements 2 solutions: replaces array bounds checking with index masking, and xores pointers with pseudo random poison value.
+The first limits bounds violation, the latter prevents attackers that don't know the poison value to access those pointers.
+\subsection{Limiting Covert Channel}
+As all spectre variants use covert channels, limiting their exploitability is crucial.
+The researchers that discovered Spectre suggest that future processors could track if data was fetched by a transient instruction and prevent it to be leaked by limiting the number of operations that can be performed on it.
+Another way to limit covert channel is making known side channels harder, such ad the approachtaken by different browser that downgraded JavaScript timer, therefore making time-based side channels less efficient.
+\subsection{Branch Poisoning Prevention}
+Intel and AMD have implemented different mechanisms to prevent Branch Poisoning, released with a microcode patch extending the ISA: Indirect Brnach Restricted Speculation(IBRS), Single Thread Indirect Branch Predictio(STIBP) and Indirect Brnach Predictor Barrier(IBPB).
+IBRS prevents cross-privilege Branch Target Prediction mistraining, by isolating the BTB based on privilege. A similar mechanism is implemented by ARM's CSV2.
+STIBP limits the influence on branch predictor caused by thread running on the same core.
+IBPB prevents software running before a certain moment from influencing software executed after it.
+These mechanisms require OS support.
+Google suggests a mechanism, called retpolines, that replaces indirect branches with return instructions, and implementing a benign infinite loop to prevent speculation of indirect branches.
