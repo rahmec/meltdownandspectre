@@ -8,7 +8,7 @@ In this section we will give a look at different speculation techniques, to bett
 \subsection{Branch Prediction}
 Branch Prediction is a technique that greatly enhances performances in superpipelined CPUs.
 When a conditional jump is encountered an entity called Branch Predictor decides if the content of that branch should be executed while fetching for data stored in memory needed to check for the condition.
-Different type of branch prediction have been implemented over the years. In this section we will describe Static Branch Prediction, prevalently used in old CPUS, and Dynamic Branch Prediction, present in every modern high-performance CPU.
+Different type of branch prediction have been implemented over the years. In this section we will describe Static Branch Prediction, prevalently used in old CPUs, and Dynamic Branch Prediction, present in every modern high-performance CPU.
 \subsubsection{Static Branch Prediction}
 Static Branch Prediction is the simplest type of Branch Prediction. Predictor behaviour does not change during the execution of a program. The simplest examples are predictors that either predict that branch are always taken or always not taken. Some ISAs give the possibility, when using branch instructions, to insert a bit that hints wether a branch should be predicted taken or not.
 \subsubsection{Dynamic Branch Prediction}
@@ -16,7 +16,10 @@ Dynamic Branch Predictors change their prediction based on information gathered 
 The table maps a branch instruction address to bits used to store information about predictions' outcome. BHT implementations differ on how the mapping is done(Hash functions, k least significant bits, ...) and the number of bits associated with each address. The simplest way is using a single bit that stores the last outcome of the branch instruction(taken, not taken).
 This method doesn't take it count if the last prediction was or wasn't right, plus for every loop it's always wrong at least once. Using 2 bits can fix this problem, how the prediction changes can be summarized by the following state diagram.
 
-\includegraphics[scale=0.35]{img/2bitBHT.png}
+\begin{figure}
+    \includegraphics[scale=0.35]{img/2bitBHT.png}
+    \caption{TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO }
+\end{figure}
 
 Dynamic Branch Predictor evolved and became more complex, and the concept of 2-level prediction arised. It is based on 2 concepts: Global Branch Correlation, or how a branch outcome is influenced by other branches, and Local Branch Correlation, that is how a branch is influenced by past predictions. This type of prediction uses what's called Patther History Table, or PHT, which associates the pattern(other branches + past outcomes) with the 2-bit schema seen before. This notably enhances the number of correct prediction.
 Modern Branch Predictors' PHT use machine learning, state-of-the-art predictors use what's called perceptron predictor. This improves misprediction rate but increases latency. For the sake of this paper we will not dive into its explaination.
@@ -35,7 +38,10 @@ If the instruction PC is not in the BTB and after being decoded turns out it's a
 This means that when the same jump instruction is encountered it is recognized as a jump instruction even before fetching it.
 Workflow can be seen in Figure underneath:
 
-\includegraphics[scale=0.35]{img/BTB.png}
+\begin{figure}
+    \includegraphics[scale=0.35]{img/BTB.png}
+    \caption{TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO }
+\end{figure}
 
 \subsection{Return Address Prediction}
 Indirect jumps are jump instructions where the target address is not directly passed, a register or a memory address containing the target is given instead.

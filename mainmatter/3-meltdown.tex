@@ -1,15 +1,6 @@
 \section{Meltdown}
 In this section we will explain how Meltdown attack works and how we managed to
-test it on our machines. This paper has the target of explaining how Meltdown works in a more "human readable" manner, and so we will provide pseudocode along with
-assembly code for reference.
-
-\subsection{Terminology}
-Meltdown resarchers have used their own terminology which helps the reader to better understand the main concepts.
-
-Transient instructions are those instructions that are executed out-of-order, meaning those instructions that, in a program logic, should be executed
-after another instruction but, because of the micro-architecture of che processor, are executed at the same time.
-
-Transient instruction sequence is a sequence of transient instructions.
+test it on our machines. This paper has the target of explaining how Meltdown works in a more "human readable" manner, and so we will provide pseudocode.
 
 \subsection{How it works}
 Meltdown attacks consists of 3 main steps:
@@ -47,7 +38,7 @@ In our example, we allocate a so called Probe Array which holds an array of "acc
 
 ...
 \end{verbatim}
-For the sake of simplicity, no\_cache\_array is a function that allocates an array without caching.
+For the sake of simplicity, no\_cache\_array is a function that allocates an array without caching and returns its address.
 For example, accessing to probe\_array[2] will result, at current micro-architectural state, in a "cache miss".
 This is a fundamental step for out-of-order exploitation.
 On the flush+reload step, what we want is that none of the pages holding these data is loaded but the one which store the value
@@ -55,8 +46,9 @@ On the flush+reload step, what we want is that none of the pages holding these d
 
 \subsubsection{Step 3: Transmit secret}
 Now we have a register containing the value of the accessed secret and an array that contains all possible values that secret may be equal to,
-all is left to do is to legitimately get that value in order to store it on the main memory without the Reservation Station deleting its result
+all is left to do is to legitimately get that value in order to store it on the main memory without the Reorder Buffer deleting its result
 after realizing that we should have not accessed that location genearting an architectural exception (also called "trap").
+
 \begin{verbatim}
 ...
     secret = readAddress(0xABC0);
@@ -66,16 +58,16 @@ after realizing that we should have not accessed that location genearting an arc
 ...
 \end{verbatim}
 
-What we oversimplified on line 3 is what loads the desired page on our core cache. On a micro-architectural level, accessing the secret-th value of probe\_array
+What we oversimplified on Line 3 is what loads the desired page on our core cache. On a micro-architectural level, accessing the secret-th value of probe\_array
 will first result on a "cache miss" and then the processor loads the value from main memory into the cache.
-Note that the pseudocode we provide dosen't really make sense on a more realistic lens, since we are assuming that the address "0xABC0" is storing the exact
+Note that the pseudocode we provide dosen't really make sense from a more realistic point of view, since we are assuming that the address "0xABC0" is storing the exact
 offset in which the value is stored on our probe\_array. In a more realistic example we should first load the value on a register, e.g. RAX,
 and then translate that value in something that can be used to retrive a specific page from the memory which,
 like hasing functions, is equal to a well-known value. Also, an important note here is that each page
 of probe\_array contains exactly and only a single value, being "A" for the first page, "B" for the second, and so on until "z".
 
 \subsubsection{Step 4: Flush+Reload to store the value}
-At this point all that's left to do is to store the secret value in a manner that Reservation Station will not delete its result.
+At this point all that's left to do is to store the secret value in a manner that Reorder Buffer will not delete its result.
 \begin{verbatim}
 ...
     secret = readAddress(0xABC0);
@@ -95,11 +87,21 @@ At this point all that's left to do is to store the secret value in a manner tha
 \newline
 \includegraphics[scale=0.25]{img/meltdown-step-four.png}
 \newline
-In our example, we iterate every page relevant to our probe\_array in order to leverage Flush+Reload technique previosly discussed.
+
+In our example, we iterate every page relevant to our probe\_array in order to leverage Flush+Reload technique previously discussed.
 We iterate all 52 pages of the probe\_array and measure how cycles does it take to load the value: in our assumptions, if the cycle count
-is lesser than 100, then the page was already on cache, which means that line 3 was the last and the only who could have done that.
-we now procede to save the value on a register which will not be ereased by the Reservation Station since Line 7 is not doing anything wrong
-from the point of view of the Reservation Station. On Line 8 we flush the cache line so to leave pages of probe\_array unloaded until we read the next privileged address.
+is lesser than 100, then the page was already cached, which means that line 3 was the last and the only who could have done that.
+We now procede to save the value on a register which will not be ereased by the Reorder Buffer since Line 7 is not doing anything wrong
+from his point of view. On Line 8 we flush the cache line so to leave pages of probe\_array unloaded until we read the next privileged address.
 
-\subsection{More realistic example}
-
+\subsection{The importance of Transient Instructions}
+The Meltdown attack is possible only because these instructions are executed out-of-order.When subsequent instructions are executed earlier than intended are called transient instructions.
+As previously discussed, instructions accessing privileged addresses are not denied by the CPU even if the process is not allowed to: there's
+another mechanism handling the privileged access to these information, meaning instructions are executed regardless of their privilege but their result will raise an
+exception.
+Exceptions are in fact raised by Meltdown, but handled so that the program continues its execution regardless.
+A trivial approch is to fork the attacking application before accessing invalid memory location, so that when exception raises the child program crashes, but the parent
+can still observe the microarchitectural state, e.g. through a side-channel.
+Another way of handling exceptions is to suppress them thourgh Intel TSX which allows to group multiple instructions to a "transaction", which appears to be an
+atomic instruction. If one instruction within the transaction fails, already exectuted instructions are reverted, but no exception is raised. The microarchitectural effects
+are still visible.
