@@ -14,7 +14,7 @@ Static Branch Prediction is the simplest type of Branch Prediction. Predictor be
 \subsubsection{Dynamic Branch Prediction}
 Dynamic Branch Predictors change their prediction based on information gathered at run-time, for an improved misprediction rate. A buffer, called Branch History Table(BHT) or Branch Prediction Buffer(BPB), is used to store predictions.
 The table maps a branch instruction address to bits used to store information about predictions' outcome. BHT implementations differ on how the mapping is done(Hash functions, k least significant bits, ...) and the number of bits associated with each address. The simplest way is using a single bit that stores the last outcome of the branch instruction(taken, not taken).
-This method doesn't take it count if the last prediction was or wasn't right, plus for every loop it's always wrong at least once. Using 2 bits can fix this problem, how the prediction changes can be summarized by Figure 2.
+This method doesn't take in count if the last prediction was or wasn't right, plus for every loop it's always wrong at least once. Using 2 bits can fix this problem, how the prediction changes can be summarized by Figure 2.
 \begin{figure}
     \includegraphics[scale=0.35]{img/2bitBHT.png}
     \caption{2-bit branch prediction schema.}
@@ -31,7 +31,7 @@ Branch Target Predictor uses a buffer called Branch Target Buffer(BTB), which st
 For every entry in the table 2 predictions bits are added, just like branch prediction 2-bit schema, to improve target prediction.
 This means that new entry have 2 prediction bits set as 'Predict Taken'.
 Every time an instruction is fetched, the BTB is looked up to check if it contains the instruction PC, if so, then the associated target address is sent out.
-If it target turns out to be correct then we've achieved a boost in performances.
+If target turns out to be correct then we've achieved a boost in performances.
 If not the entry is deleted from the BTB, and 2 cycles are lost.
 If the instruction PC is not in the BTB and after being decoded turns out it's a jump instruction then its PC and target address are saved in the table.
 This means that when the same jump instruction is encountered it is recognized as a jump instruction even before fetching it.
@@ -45,10 +45,10 @@ Workflow can be seen in Figure 3.
 \subsection{Return Address Prediction}
 Indirect jumps are jump instructions where the target address is not directly passed, a register or a memory address containing the target is given instead.
 This means that once the CU decodes the indirect jump instruction, clock cycles are spent to fetch the address from the register, cache or, worst-case scenario, a cache-miss happens and the target is fetched from main memory.
-The majority of this calls are from procedure returns. Even though a Branch Target Predictor could be used in this situation, its accuracy can be low in this situations. A buffer called Return Stack Buffer is used instead. It acts as a stack, so it pushes the latest return address on the stack and pops it off when a return is called.
+The majority of this calls are from procedure returns. Even though a Branch Target Predictor could be used, its accuracy can be low in this situations. A buffer called Return Stack Buffer is used instead. It acts as a stack, so it pushes the latest return address on the stack and pops it off when a return is called.
 
 \subsection{Speculative Store Buffer Bypass}
 In order to improve performances, write operations(also called stores) are saved in a high speed buffer called Store Buffer. This allows the CPU to not wait for the buffer to be written back in slower memory.
-This implies that every time a read operaton on main memory is done, the CPU must check if a previously store operation on the same address was done and not written back. 
+This implies that every time a read operation on main memory is done, the CPU must check if a previously store operation on the same address was done and not written back. 
 Modern CPUs bypass this check and assume that such stores are already written back, thus proceed to speculatively execute later instructions, and concurrently check the Store Buffer.
 If conflicts are found, results of transient instructions are thrown away, otherwise a significant speedup is achieved.
