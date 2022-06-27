@@ -64,7 +64,7 @@ will first result on a "cache miss" and then the processor loads the value from 
 Note that the pseudocode we provide dosen't really make sense from a more realistic point of view, since we are assuming that the address "0xABC0" is storing the exact
 offset in which the value is stored on our probe\_array. In a more realistic example we should first load the value on a register, e.g. RAX,
 and then translate that value in something that can be used to retrive a specific page from the memory which,
-like hasing functions, is equal to a well-known value. Also, an important note here is that each page
+like hashing functions, is equal to a well-known value. Also, an important note here is that each page
 of probe\_array contains exactly and only a single value, being "A" for the first page, "B" for the second, and so on until "z".
 
 \subsubsection{Step 4: Flush+Reload to store the value}
