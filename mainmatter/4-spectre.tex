@@ -12,10 +12,10 @@ This can be achieved in different ways, like inserting a certain number of passe
 The attacker might use different conditions, with the most one being a bound check, and then accessing an array out of its bounds. When using this condition the attack is known as Bound Check Bypass.
 The following is an example of this attack in C language:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
 if(x < array1_size)
 	y = array2(array1[x] * 4096)
-\end{verbatim}
+\end{Verbatim}
 
 The ideal situation for the success of the exploit is such that array2 and array1\_size are uncached, even though in some scenarios the exploit works even if array1\_size is actually cached.
 In this example the secret(array1[x]) is byte-sized, and array2 dimension is 1MB.
@@ -25,19 +25,20 @@ To recover the secret value the attacker typically tries to access array2 in the
 Accessing the cached content will take way less clock cycles, and at that point the secret is easily recovered by dividing the array2 index by 4096.
 The following is an example of this last described  method. We are assuming to run this instructions on a machine where the cache access time is at worst 50 cycles.
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
 int max_cache_access_time= 50;
 int secret;
 for(int i=0; i<256; i++){
 	current_clock= __builtin_ia32_rdtsc ();
 	y = array2( i * 4096);
-	spent_clocks=  __builtin_ia32_rdtsc () - current_clock;
-	if (spent_clocks<=max_cache_access_time){
+	spent_clocks=
+	__builtin_ia32_rdtsc () - current_clock;
+	if(spent_clocks<=max_cache_access_time){
 		secret = i;
 		break;
 	}
 }
-\end{verbatim}
+\end{Verbatim}
 
 \subsection{v2 - Branch Target Injection}
 This variant exploits the Branch Target Predictor, in particular its ability to predict indirect branches.
@@ -49,11 +50,11 @@ To mistrain the Branch Target Predictor the attacker runs from its own context a
 How it must be mistrained varies among architectures, as the number of bit used per destination address changes.
 After choosing the gadget, mistrainer we must branch to the same virtual address the predictor should mispredict to.
 It doesn't matter what it's branching to, the goal is correctly mistraining the predictor.
-This concept can be seen from the following schema:
+This concept can be seen from Figure 7.
 
 \begin{figure}[!h]
     \includegraphics[scale=0.4]{img/sv2-mistraining.png}
-    \caption{}
+    \caption{the attacker mistrains the predictor from his context(A), by jumping to a function that has the same virtual address as the gadget we want to be mispredicted in victim context(B)}
 \end{figure}
 
 We must also note that the mistrainer must run on the same core the victim program will run on, as prediction tables are not shared between different cores.
