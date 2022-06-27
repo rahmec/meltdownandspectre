@@ -25,12 +25,10 @@ So our secret is stored from "0xABC0" (`m', first letter) to "0xABC7" (`n', last
    secret = readAddress(0xABC0);
 ...
 \end{Verbatim}
-
 \begin{figure}[!h]
     \includegraphics[scale=0.25]{img/meltdown-step-one.png}
     \caption{Current microarchitectural state}
 \end{figure}
-
 
 \subsubsection{Step 2: Allocate Probe Array}
 In our example, we allocate a so called Probe Array which holds an array of "acceptable" values for our secret.
@@ -39,7 +37,6 @@ In our example, we allocate a so called Probe Array which holds an array of "acc
     secret = readAddress(0xABC0);
     probe_array=no_cache_array("A",
 	"B", "C",..., "Z", "a", ... "z");
-
 ...
 \end{Verbatim}
 For the sake of simplicity, no\_cache\_array is a function that allocates an array without caching and returns its address.
