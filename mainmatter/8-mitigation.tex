@@ -1,8 +1,8 @@
 \section{Meltdown mitigations}
-Since Meltdown is a micro-architectural vulnerability, there is no software update that can completaly make mahcines secured from Meldown attacks.
+Since Meltdown is a micro-architectural vulnerability, there is no software update that can completely make mahcines secured from Meldown attacks.
 Not even KAISER (also known as PTI, page-table isolation, or KPTI on Linux kernel) which is the proposed
 mitigation by meltdown researchers make machines secure. That's because
-Mletdown, and Spectre, acts on hardware and bypasses the hardware-enforced isolation of security domains.
+Meltdown, and Spectre, acts on hardware and bypasses the hardware-enforced isolation of security domains.
 A countermeasure would be to completely disable out-of-order execution but this will make processors slow enough to make any modern CPU parallelism mechanism
 completely useless and the performance impact would be devastating. As of 2022, PTI (KAISER) is enabled by default on Linux kernels as a countermeasure to Meltdown.
 
