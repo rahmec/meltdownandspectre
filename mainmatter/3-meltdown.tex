@@ -3,15 +3,15 @@ In this section we will explain how Meltdown attack works and how we managed to
 test it on our machines. This paper has the target of explaining how Meltdown works in a more "human readable" manner, and so we will provide pseudocode.
 
 \subsection{How it works}
-Meltdown attacks consists of 3 main steps:
+Meltdown attacks consists of 4 main steps:
 
-\begin{enumerate}[label={Step \arabic*:}]
-    \item Load content of (inaccessible) memory location on a register
-    \item Allocate "Probe Array" on main memory
-    \item Use the previosly loaded data to transimt secret on a legitimate instruction execution
-    \item Store leaked secret on main memory leveraging Flush+Reload and previosly allocated Probe Array
-\end{enumerate}
+\textbf{Step 1} Load content of (inaccessible) memory location on a register
 
+\textbf{Step 2} Allocate "Probe Array" on main memory
+
+\textbf{Step 3} Use the previosly loaded data to transimt secret on a legitimate instruction execution
+
+\textbf{Step 4} Store leaked secret on main memory leveraging Flush+Reload and previosly allocated Probe Array
 
 \subsubsection{Step 1: Fetch privileged data}
 Meltdown's main objective is to get privileged data from main memory which is otherwise inaccessible, and to do so
@@ -37,8 +37,8 @@ In our example, we allocate a so called Probe Array which holds an array of "acc
 \begin{verbatim}
 ...
     secret = readAddress(0xABC0);
-    probe_array=no_cache_array("A", "B", "C", ... 
-                , "Z", "a", ... "z");
+    probe_array=no_cache_array("A",
+	"B", "C",..., "Z", "a", ... "z");
 
 ...
 \end{verbatim}
@@ -56,8 +56,8 @@ after realizing that we should have not accessed that location genearting an arc
 \begin{verbatim}
 ...
     secret = readAddress(0xABC0);
-    probe_array=no_cache_array("A", "B", "C", ... 
-                , "Z", "a", ... "z");
+    probe_array=no_cache_array("A",
+	"B", "C",..., "Z", "a", ... "z");
     probe_array(secret);
 ...
 \end{verbatim}
@@ -75,13 +75,14 @@ At this point all that's left to do is to store the secret value in a manner tha
 \begin{verbatim}
 ...
     secret = readAddress(0xABC0);
-    probe_array=no_cache_array("A", "B", "C", ... 
-                , "Z", "a", ... "z");
+    probe_array=no_cache_array("A",
+	"B", "C",..., "Z", "a", ... "z");
     probe_array(secret);
     for(i = 0; i < 52; i++){
         cycle_count_set(0);
         probe_array(i);
-        if(cycle_count_get < 100) p = probe_array(i);
+        if(cycle_count_get < 100)
+            p = probe_array(i);
         clflush(probe_array(i))
     }
 ...
