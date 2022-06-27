@@ -14,11 +14,10 @@ Static Branch Prediction is the simplest type of Branch Prediction. Predictor be
 \subsubsection{Dynamic Branch Prediction}
 Dynamic Branch Predictors change their prediction based on information gathered at run-time, for an improved misprediction rate. A buffer, called Branch History Table(BHT) or Branch Prediction Buffer(BPB), is used to store predictions.
 The table maps a branch instruction address to bits used to store information about predictions' outcome. BHT implementations differ on how the mapping is done(Hash functions, k least significant bits, ...) and the number of bits associated with each address. The simplest way is using a single bit that stores the last outcome of the branch instruction(taken, not taken).
-This method doesn't take it count if the last prediction was or wasn't right, plus for every loop it's always wrong at least once. Using 2 bits can fix this problem, how the prediction changes can be summarized by the following state diagram.
-
+This method doesn't take it count if the last prediction was or wasn't right, plus for every loop it's always wrong at least once. Using 2 bits can fix this problem, how the prediction changes can be summarized by Figure 2.
 \begin{figure}
     \includegraphics[scale=0.35]{img/2bitBHT.png}
-    \caption{TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO }
+    \caption{2-bit branch prediction schema.}
 \end{figure}
 
 Dynamic Branch Predictor evolved and became more complex, and the concept of 2-level prediction arised. It is based on 2 concepts: Global Branch Correlation, or how a branch outcome is influenced by other branches, and Local Branch Correlation, that is how a branch is influenced by past predictions. This type of prediction uses what's called Patther History Table, or PHT, which associates the pattern(other branches + past outcomes) with the 2-bit schema seen before. This notably enhances the number of correct prediction.
@@ -36,11 +35,11 @@ If it target turns out to be correct then we've achieved a boost in performances
 If not the entry is deleted from the BTB, and 2 cycles are lost.
 If the instruction PC is not in the BTB and after being decoded turns out it's a jump instruction then its PC and target address are saved in the table.
 This means that when the same jump instruction is encountered it is recognized as a jump instruction even before fetching it.
-Workflow can be seen in Figure underneath:
+Workflow can be seen in Figure 3.
 
 \begin{figure}
     \includegraphics[scale=0.35]{img/BTB.png}
-    \caption{TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO }
+    \caption{Branch Target Prediction workflow.}
 \end{figure}
 
 \subsection{Return Address Prediction}

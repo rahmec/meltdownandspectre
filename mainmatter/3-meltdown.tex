@@ -20,11 +20,11 @@ In our example we will refer to such address as the "0xABC0" memory address, whi
 which points to the first byte of an array containing our secret ("Meltdown").
 So our secret is stored from "0xABC0" (`m', first letter) to "0xABC7" (`n', last letter).
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
 ...
    secret = readAddress(0xABC0);
 ...
-\end{verbatim}
+\end{Verbatim}
 
 \begin{figure}[!h]
     \includegraphics[scale=0.25]{img/meltdown-step-one.png}
@@ -34,14 +34,14 @@ So our secret is stored from "0xABC0" (`m', first letter) to "0xABC7" (`n', last
 
 \subsubsection{Step 2: Allocate Probe Array}
 In our example, we allocate a so called Probe Array which holds an array of "acceptable" values for our secret.
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
 ...
     secret = readAddress(0xABC0);
     probe_array=no_cache_array("A", "B", "C", ... 
                 , "Z", "a", ... "z");
 
 ...
-\end{verbatim}
+\end{Verbatim}
 For the sake of simplicity, no\_cache\_array is a function that allocates an array without caching and returns its address.
 For example, accessing to probe\_array[2] will result, at current micro-architectural state, in a "cache miss".
 This is a fundamental step for out-of-order exploitation.
@@ -53,14 +53,14 @@ Now we have a register containing the value of the accessed secret and an array 
 all is left to do is to legitimately get that value in order to store it on the main memory without the Reorder Buffer deleting its result
 after realizing that we should have not accessed that location genearting an architectural exception (also called "trap").
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
 ...
     secret = readAddress(0xABC0);
     probe_array=no_cache_array("A", "B", "C", ... 
                 , "Z", "a", ... "z");
     probe_array(secret);
 ...
-\end{verbatim}
+\end{Verbatim}
 
 What we oversimplified on Line 3 is what loads the desired page on our core cache. On a micro-architectural level, accessing the secret-th value of probe\_array
 will first result on a "cache miss" and then the processor loads the value from main memory into the cache.
@@ -72,7 +72,7 @@ of probe\_array contains exactly and only a single value, being "A" for the firs
 
 \subsubsection{Step 4: Flush+Reload to store the value}
 At this point all that's left to do is to store the secret value in a manner that Reorder Buffer will not delete its result.
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
 ...
     secret = readAddress(0xABC0);
     probe_array=no_cache_array("A", "B", "C", ... 
@@ -85,7 +85,7 @@ At this point all that's left to do is to store the secret value in a manner tha
         clflush(probe_array(i))
     }
 ...
-\end{verbatim}
+\end{Verbatim}
 
 \begin{figure}[!h]
     \includegraphics[scale=0.25]{img/meltdown-step-two.png}
