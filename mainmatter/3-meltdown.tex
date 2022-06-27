@@ -101,7 +101,8 @@ We now procede to save the value on a register which will not be ereased by the 
 from his point of view. On Line 8 we flush the cache line so to leave pages of probe\_array unloaded until we read the next privileged address.
 
 \subsection{The importance of Transient Instructions}
-The Meltdown attack is possible only because these instructions are executed out-of-order.When subsequent instructions are executed earlier than intended are called transient instructions.
+The Meltdown attack is possible only because these instructions are executed out-of-order.
+Subsequent instructions that are executed earlier than intended are called transient instructions.
 As previously discussed, instructions accessing privileged addresses are not denied by the CPU even if the process is not allowed to: there's
 another mechanism handling the privileged access to these information, meaning instructions are executed regardless of their privilege but their result will raise an
 exception.
