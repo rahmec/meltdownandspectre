@@ -95,7 +95,7 @@ At this point all that's left to do is to store the secret value in a manner tha
 \end{figure}
 
 In our example, we iterate every page relevant to our probe\_array in order to leverage Flush+Reload technique previously discussed.
-We iterate all 52 pages of the probe\_array and measure how cycles does it take to load the value: in our assumptions, if the cycle count
+We iterate all 52 pages of the probe\_array and measure how many cycles it takes to load the value: we assume that if the cycle count
 is lesser than 100, then the page was already cached, which means that line 3 was the last and the only who could have done that.
 We now procede to save the value on a register which will not be ereased by the Reorder Buffer since Line 7 is not doing anything wrong
 from his point of view. On Line 8 we flush the cache line so to leave pages of probe\_array unloaded until we read the next privileged address.
